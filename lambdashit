@@ -47,7 +47,7 @@ def on_launch(launch_request, session):
     print("on_launch requestId=" + launch_request['requestId'] +
           ", sessionId=" + session['sessionId'])
     # Dispatch to your skill's launch
-    return get_welcome_response("0")
+    return get_welcome_response()
 
 
 def on_intent(intent_request, session):
@@ -61,17 +61,17 @@ def on_intent(intent_request, session):
 
     # Dispatch to your skill's intent handlers
     if intent_name == "Rhyme":
-        return get_welcome_response("1")
+        return rhyme()
     elif intent_name == "Metronome":
-        return get_welcome_response("2")
+        return metronome()
     elif intent_name == "OneChord":
-        return get_welcome_response("3")
+        return one_chord()
     elif intent_name == "ChordProgression":
-        return get_welcome_response("4")
+        return chord_progression()
     elif intent_name == "SampleBeat":
-        return get_welcome_response("5")    
+        return sample_beat()    
     elif intent_name == "AMAZON.HelpIntent":
-        return get_welcome_response("6")
+        return help()
     elif intent_name == "AMAZON.CancelIntent" or intent_name == "AMAZON.StopIntent":
         return handle_session_end_request()
     else:
@@ -89,8 +89,20 @@ def on_session_ended(session_ended_request, session):
     #handle_session_end_request()
 # --------------- Functions that control the skill's behavior ------------------
 
+def rhyme():
+    return ""
+def metronome():
+    return ""
+def one_chord():
+    return ""
+def chord_progression():
+    return ""
+def sample_beat():
+    return ""
+def help():
+    return ""
 
-def get_welcome_response(val):
+def get_welcome_response():
     """ If we wanted to initialize the session to have some attributes we could
     add those here
     """
@@ -98,7 +110,7 @@ def get_welcome_response(val):
     session_attributes = {}
     card_title = "Welcome"
     speech_output = "Welcome to Echo Jam. " \
-                    "To get help, say help. " + val
+                    "To get help, say help. "
     # If the user either does not reply to the welcome message or says something
     # that is not understood, they will be prompted again with this text.
     reprompt_text = getHelpMessage()
