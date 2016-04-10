@@ -80,7 +80,7 @@ def on_session_ended(session_ended_request, session):
     print("on_session_ended requestId=" + session_ended_request['requestId'] +
           ", sessionId=" + session['sessionId'])
     # add cleanup logic here
-
+    handle_session_end_request()
 # --------------- Functions that control the skill's behavior ------------------
 
 
@@ -106,7 +106,7 @@ def getHelpMessage():
 
 def handle_session_end_request():
     card_title = "Session Ended"
-    speech_output = "Thank you for trying the Alexa Skills Kit sample. " \
+    speech_output = "Thank you for making music with Echo Jam. " \
                     "Have a nice day! "
     # Setting this to true ends the session and exits the skill.
     should_end_session = True
