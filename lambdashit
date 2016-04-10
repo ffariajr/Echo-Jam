@@ -91,17 +91,18 @@ def get_welcome_response():
 
     session_attributes = {}
     card_title = "Welcome"
-    speech_output = "Welcome to the Alexa Skills Kit sample. " \
-                    "Please tell me your favorite color by saying, " \
-                    "my favorite color is red"
+    speech_output = "Welcome to Echo Jam. " \
+                    "To get help, say help. "
     # If the user either does not reply to the welcome message or says something
     # that is not understood, they will be prompted again with this text.
-    reprompt_text = "Please tell me your favorite color by saying, " \
-                    "my favorite color is red."
+    reprompt_text = getHelpMessage()
     should_end_session = False
     return build_response(session_attributes, build_speechlet_response(
         card_title, speech_output, reprompt_text, should_end_session))
 
+def getHelpMessage():
+    return "You can ask me 'Give me a metronome at blank bpm' or 'Give me words that rhyme with blank'." \
+           "You can also ask me 'Give me a chord progression in key blank' or 'Give me chord blank'."
 
 def handle_session_end_request():
     card_title = "Session Ended"
