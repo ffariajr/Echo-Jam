@@ -95,7 +95,7 @@ def metronome(request):
     session_attributes = {}
     card_title = "Metronome"
     bpm = request['intent']['slots']['Rate']['value']
-    speech_output = "<speak>" + bpm + " bpm <audio src='http://echo-jam-audio-files.s3-website-us-east-1.amazonaws.com/metronome/" + bpm + "bpm.mp3' /> </speak>"
+    speech_output = "<speak>" + bpm + " bpm <audio src='http://s3.amazonaws.com/echo-jam-audio-files/metronome/" + bpm + "bpm.mp3' /> </speak>"
     should_end_session = False
     return build_response(session_attributes, build_speechlet_response_ssml(
         card_title, speech_output, None, should_end_session))
