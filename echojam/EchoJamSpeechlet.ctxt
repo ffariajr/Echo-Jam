@@ -1,0 +1,19 @@
+#BlueJ class context
+comment0.params=request\ session
+comment0.target=void\ onSessionStarted(com.amazon.speech.speechlet.SessionStartedRequest,\ com.amazon.speech.speechlet.Session)
+comment1.params=request\ session
+comment1.target=com.amazon.speech.speechlet.SpeechletResponse\ onLaunch(com.amazon.speech.speechlet.LaunchRequest,\ com.amazon.speech.speechlet.Session)
+comment2.params=request\ session
+comment2.target=com.amazon.speech.speechlet.SpeechletResponse\ onIntent(com.amazon.speech.speechlet.IntentRequest,\ com.amazon.speech.speechlet.Session)
+comment3.params=request\ session
+comment3.target=void\ onSessionEnded(com.amazon.speech.speechlet.SessionEndedRequest,\ com.amazon.speech.speechlet.Session)
+comment4.params=
+comment4.target=com.amazon.speech.speechlet.SpeechletResponse\ getWelcomeResponse()
+comment4.text=\n\ Creates\ and\ returns\ a\ {@code\ SpeechletResponse}\ with\ a\ welcome\ message.\n\n\ @return\ SpeechletResponse\ spoken\ and\ visual\ response\ for\ the\ given\ intent\n
+comment5.params=
+comment5.target=com.amazon.speech.speechlet.SpeechletResponse\ getHelloResponse()
+comment5.text=\n\ Creates\ a\ {@code\ SpeechletResponse}\ for\ the\ hello\ intent.\n\n\ @return\ SpeechletResponse\ spoken\ and\ visual\ response\ for\ the\ given\ intent\n
+comment6.params=
+comment6.target=com.amazon.speech.speechlet.SpeechletResponse\ getHelpResponse()
+comment6.text=\n\ Creates\ a\ {@code\ SpeechletResponse}\ for\ the\ help\ intent.\n\n\ @return\ SpeechletResponse\ spoken\ and\ visual\ response\ for\ the\ given\ intent\n
+numComments=7
