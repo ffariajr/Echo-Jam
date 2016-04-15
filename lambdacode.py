@@ -99,7 +99,13 @@ def metronome(request):
         card_title, speech_output, None, should_end_session))
 
 def one_chord(request):
-    return ""
+    session_attributes = {}
+    card_title = "Chord"
+    chord = request['intent']['slots']['TheChord']['value']
+    speech_output = "<speak>" + chord + " chord <audio src='https://s3.amazonaws.com/echo-jam-audio-files/chords/" + chord + " chord.mp3' /> </speak>"
+    should_end_session = False
+    return build_response(session_attributes, build_speechlet_response_ssml(
+        card_title, speech_output, None, should_end_session))
 def chord_progression(request):
     return ""
 def halp(request):
