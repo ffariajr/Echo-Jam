@@ -120,7 +120,7 @@ def halp(request):
     elif(feature == "chord" or feature == "chords"):
         speech_output = "You can ask for a chord by saying 'Give me an A chord'"
     elif(feature == "chord progression"):
-        speech_output = "You can ask for a chord progression by saying 'Give me a chord progression in key A'"
+        speech_output = "You can ask for a chord progression by saying 'Give me a chord progression in key, A'"
     elif(feature == "rhyme" or feature == "rhyming"):
         speech_output = "You can ask for rhyming words by saying 'Give me words that rhyme with Amazon'"
     else:
