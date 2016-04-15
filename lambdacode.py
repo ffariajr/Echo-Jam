@@ -95,7 +95,7 @@ def rhyme(request):
     req = requests.get("https://api.datamuse.com/words?rel_rhy=" + rhyme)
     speech_output = "How about "
     for(x in req.json()):
-        speech_output = speech_output + " " + x['word']
+        speech_output = speech_output + " " + x[u'word']
     should_end_session = False
     return build_response(session_attributes, build_speechlet_response(
         card_title, speech_output, None, should_end_session))
