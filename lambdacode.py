@@ -8,6 +8,7 @@ http://amzn.to/1LGWsLG
 """
 
 from __future__ import print_function
+import requests
 
 def lambda_handler(event, context):
     """ Route the incoming request based on type (LaunchRequest, IntentRequest,
@@ -88,7 +89,16 @@ def on_session_ended(session_ended_request, session):
 # --------------- Functions that control the skill's behavior ------------------
 
 def rhyme(request):
-    return ""
+    session_attributes = {}
+    card_title = "Rhyme"
+    rhyme = request['intent']['slots']['TheWord']['value']
+    req = requests.get("https://api.datamuse.com/words?rel_rhy=" + rhyme)
+    speech_output = "How about "
+    for(x in req.json()):
+        speech_output = speech_output + " " + x['word']
+    should_end_session = False
+    return build_response(session_attributes, build_speechlet_response(
+        card_title, speech_output, None, should_end_session))
 def metronome(request):
     session_attributes = {}
     card_title = "Metronome"
