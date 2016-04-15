@@ -70,7 +70,7 @@ def on_intent(intent_request, session):
         return chord_progression(intent_request)
     elif intent_name == "SampleBeat":
         return sample_beat(intent_request)    
-    elif intent_name == "AMAZON.HelpIntent":
+    elif intent_name == "AMAZON.HelpMe":
         return halp(intent_request)
     elif intent_name == "AMAZON.CancelIntent" or intent_name == "AMAZON.StopIntent":
         return handle_session_end_request()
