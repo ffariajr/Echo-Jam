@@ -9,6 +9,11 @@ http://amzn.to/1LGWsLG
 
 from __future__ import print_function
 import httplib
+import json
+import logging
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 def lambda_handler(event, context):
     """ Route the incoming request based on type (LaunchRequest, IntentRequest,
@@ -92,13 +97,16 @@ def rhyme(request):
     session_attributes = {}
     card_title = "Rhyme"
     rhyme = request['intent']['slots']['TheWord']['value']
-    req = httplib.HTTPSConnection("api.datamuse.com").request("GET", "/words?rel_rhy=" + rhyme)
+    req = httplib.HTTPSConnection("api.datamuse.com")
+    req.request("GET", "/words?rel_rhy=" + rhyme)
     req1 = req.getresponse()
     req2 = req1.read()
-    #req = Request("https://api.datamuse.com/words?rel_rhy=" + rhyme)
-    speech_output = "How about "
-    for(x in req2):
-        speech_output = speech_output + " " + x['word']
+    req3 = json.loads(req2)
+    speech_output = "How about " + req3[0]["word"]
+    q = 1
+    while q < len(req3):
+        speech_output = speech_output + ", " + req3[q]["word"]
+        q += 1
     should_end_session = False
     return build_response(session_attributes, build_speechlet_response(
         card_title, speech_output, None, should_end_session))
