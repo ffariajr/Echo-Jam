@@ -166,8 +166,8 @@ def build_speechlet_response(title, output, reprompt_text, should_end_session):
         },
         'card': {
             'type': 'Simple',
-            'title': 'SessionSpeechlet - ' + title,
-            'content': 'SessionSpeechlet - ' + output
+            'title': 'Echo Jam - ' + title,
+            'content': 'Echo Jam - ' + output
         },
         'reprompt': {
             'outputSpeech': {
@@ -185,8 +185,8 @@ def build_speechlet_response_ssml(title, output, reprompt_text, should_end_sessi
         },
         'card': {
             'type': 'Simple',
-            'title': 'SessionSpeechlet - ' + title,
-            'content': 'SessionSpeechlet - ' + output
+            'title': 'Echo Jam - ' + title,
+            'content': 'Echo Jam - ' + output
         },
         'reprompt': {
             'outputSpeech': {
