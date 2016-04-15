@@ -8,7 +8,7 @@ http://amzn.to/1LGWsLG
 """
 
 from __future__ import print_function
-from python-requests import requests
+from urllib2 import Request
 
 def lambda_handler(event, context):
     """ Route the incoming request based on type (LaunchRequest, IntentRequest,
@@ -94,7 +94,7 @@ def rhyme(request):
     rhyme = request['intent']['slots']['TheWord']['value']
     req = requests.get("https://api.datamuse.com/words?rel_rhy=" + rhyme)
     speech_output = "How about "
-    for(x in req.Json()):
+    for(x in req.json()):
         speech_output = speech_output + " " + x[u'word']
     should_end_session = False
     return build_response(session_attributes, build_speechlet_response(
