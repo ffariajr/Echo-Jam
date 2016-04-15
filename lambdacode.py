@@ -110,7 +110,7 @@ def halp(request):
     session_attributes = {}
     card_title = "Help"
     feature = request['intent']['slots']['Help']
-    if(feature.len > 0):
+    if(feature.len > 1):
         feature = feature['value']
     else:
         feature = ""
