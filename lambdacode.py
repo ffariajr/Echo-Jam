@@ -92,7 +92,7 @@ def rhyme(request):
     session_attributes = {}
     card_title = "Rhyme"
     rhyme = request['intent']['slots']['TheWord']['value']
-    req = requests.get("https://api.datamuse.com/words?rel_rhy=" + rhyme)
+    req = Request("https://api.datamuse.com/words?rel_rhy=" + rhyme)
     speech_output = "How about "
     for(x in req.json()):
         speech_output = speech_output + " " + x[u'word']
