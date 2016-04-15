@@ -107,7 +107,23 @@ def chord_progression(request):
 def sample_beat(request):
     return ""
 def halp(request):
-    return ""
+    session_attributes = {}
+    card_title = "Help"
+    feature = request['intent']['slots']['Help']['value']
+    if(feature == "Metronome"):
+        speech_output = "You can ask for a tempo by saying 'Give me a beat at 100 bpm'"
+    elif(feature == "Chord" || feature == "Chords"):
+        speech_output = "You can ask for a chord by saying 'Give me an A chord'"
+    elif(feature == "Chord Progression"):
+        speech_output = "You can ask for a chord progression by saying 'Give me a chord progression in key A'"
+    elif(feature == "Rhyming"):
+        speech_output = "You can ask for rhyming words by saying 'Give me words that rhyme with Amazon'"
+    else:
+        speech_output = "You can ask for help for specific features by saying 'Help chords, help rhyming, help metronome, or help chord progression'"
+    reprompt_text = "What do you need help with?"
+    should_end_session = False
+    return build_response(session_attributes, build_speechlet_response(
+        card_title, speech_output, reprompt_text, should_end_session))
 
 def get_welcome_response():
     """ If we wanted to initialize the session to have some attributes we could
