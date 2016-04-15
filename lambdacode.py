@@ -117,7 +117,7 @@ def halp(request):
     speech_output = ""
     if(feature == "Metronome"):
         speech_output = "You can ask for a tempo by saying 'Give me a beat at 100 bpm'"
-    elif(feature == "Chord" || feature == "Chords"):
+    elif(feature == "Chord" or feature == "Chords"):
         speech_output = "You can ask for a chord by saying 'Give me an A chord'"
     elif(feature == "Chord Progression"):
         speech_output = "You can ask for a chord progression by saying 'Give me a chord progression in key A'"
