@@ -68,8 +68,6 @@ def on_intent(intent_request, session):
         return one_chord(intent_request)
     elif intent_name == "ChordProgression":
         return chord_progression(intent_request)
-    elif intent_name == "SampleBeat":
-        return sample_beat(intent_request)    
     elif intent_name == "AMAZON.HelpIntent" or intent_name == "HelpMe":
         return halp(intent_request)
     elif intent_name == "AMAZON.CancelIntent" or intent_name == "AMAZON.StopIntent":
@@ -103,8 +101,6 @@ def metronome(request):
 def one_chord(request):
     return ""
 def chord_progression(request):
-    return ""
-def sample_beat(request):
     return ""
 def halp(request):
     session_attributes = {}
