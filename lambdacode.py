@@ -109,7 +109,11 @@ def sample_beat(request):
 def halp(request):
     session_attributes = {}
     card_title = "Help"
-    feature = request['intent']['slots']['Help']['value']
+    feature = request['intent']['slots']['Help']
+    if(feature.len > 0):
+        feature = feature['value']
+    else:
+        feature = ""
     if(feature == "Metronome"):
         speech_output = "You can ask for a tempo by saying 'Give me a beat at 100 bpm'"
     elif(feature == "Chord" || feature == "Chords"):
