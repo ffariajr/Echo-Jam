@@ -114,6 +114,7 @@ def halp(request):
         feature = feature['value']
     else:
         feature = ""
+    speech_output = ""
     if(feature == "Metronome"):
         speech_output = "You can ask for a tempo by saying 'Give me a beat at 100 bpm'"
     elif(feature == "Chord" || feature == "Chords"):
