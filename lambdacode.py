@@ -102,7 +102,7 @@ def rhyme(request):
     req1 = req.getresponse()
     req2 = req1.read()
     req3 = json.loads(req2)
-    speech_output = "How about " + req3[0]["word"]
+    speech_output = "How about: " + req3[0]["word"]
     q = 1
     while q < len(req3):
         speech_output = speech_output + ", " + req3[q]["word"]
