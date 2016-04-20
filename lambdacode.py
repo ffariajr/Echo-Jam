@@ -19,7 +19,7 @@ prog1 = ("c" "d flat" "d" "e flat" "e" "f" "g flat" "g" "a flat" "a" "b flat" "b
 prog2 = ("f" "g flat" "g" "a flat" "a" "b flat" "c flat" "c" "d flat" "d" "e flat" "e")
 prog3 = ("g" "a flat" "a" "b flat" "b" "c" "d flat" "d" "e flat" "e" "f" "f sharp")
 prog4 = ("a minor" "b flat minor" "b minor" "c minor" "c sharp minor" "d minor" "e flat minor" "e minor" "f minor" "f sharp minor" "g minor" "g sharp minor")
-progs = (prog1, prog2, prog3, prog4, prog1)
+progs = ("0": prog1, "1": prog2, "2": prog3, "3": prog4, "4": prog1)
 
 sssrc = "'https://s3.amazonaws.com/echo-jam-audio-files/"
 
@@ -131,7 +131,7 @@ def chord_progression(request):
     root = prog1.index(request['intent']['slots']['ChordA']['value'])
     theprog[]
     for z in 0..4:
-        theprog[z] = "'" + sssrc + "chordprogression/" + progs[z][root] + " chord.mp3'"
+        theprog[z] = "'" + sssrc + "chordprogression/" + progs[str(z)][root] + " chord.mp3'"
     speech_output = "<speak>" + chord + " chord <audio src=" + theprog[0] + " /> <audio src=" + theprog[1] + " /> <audio src=" + theprog[2] + " /> <audio src=" + theprog[3] + " /> <audio src=" + theprog[4] + " /> </speak>"
     should_end_session = False
     return build_response(session_attributes, build_speechlet_response_ssml(card_title, speech_output, None, should_end_session))
