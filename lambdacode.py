@@ -129,7 +129,7 @@ def chord_progression(request):
     session_attributes = {}
     card_title = "Chord"
     root = prog1.index(request['intent']['slots']['ChordA']['value'])
-    theprog = [0 0 0 0 0]
+    theprog = [0, 0, 0, 0, 0]
     for z in range(0, 4):
         temptup = progs[str(z)]
         theprog[z] = "'" + sssrc + "chordprogression/" + temptup[root] + " chord.mp3'"
