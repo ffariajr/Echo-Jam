@@ -127,16 +127,15 @@ def one_chord(request):
 
 def chord_progression(request):
     session_attributes = {}
-    card_title = "Chord"
-    root = prog1.index(request['intent']['slots']['ChordA']['value'])
+    card_title = "Chord Progression"
+    rootchord = request['intent']['slots']['ChordA']['value']
+    root = prog1.index(rootchord)
     theprog = [0, 0, 0, 0, 0]
     for z in range(0, 4):
-        temptup = progs[str(z)]
-        theprog[z] = "'" + sssrc + "chordprogression/" + temptup[root] + " chord.mp3'"
-    speech_output = "<speak>" + chord + " chord <audio src=" + theprog[0] + " /> <audio src=" + theprog[1] + " /> <audio src=" + theprog[2] + " /> <audio src=" + theprog[3] + " /> <audio src=" + theprog[4] + " /> </speak>"
+        theprog[z] = "'" + sssrc + "chordprogression/" + progs[str(z)][root] + " chord.mp3'"
+    speech_output = "<speak>chord progression in the key of " + rootchord + " <audio src=" + theprog[0] + " /> <audio src=" + theprog[1] + " /> <audio src=" + theprog[2] + " /> <audio src=" + theprog[3] + " /> <audio src=" + theprog[4] + " /> </speak>"
     should_end_session = False
     return build_response(session_attributes, build_speechlet_response_ssml(card_title, speech_output, None, should_end_session))
-
 
 def halp(request):
     session_attributes = {}
