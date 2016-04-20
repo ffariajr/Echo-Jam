@@ -110,6 +110,7 @@ def rhyme(request):
     should_end_session = False
     return build_response(session_attributes, build_speechlet_response(
         card_title, speech_output, None, should_end_session))
+
 def metronome(request):
     session_attributes = {}
     card_title = "Metronome"
@@ -127,8 +128,10 @@ def one_chord(request):
     should_end_session = False
     return build_response(session_attributes, build_speechlet_response_ssml(
         card_title, speech_output, None, should_end_session))
+
 def chord_progression(request):
     return ""
+
 def halp(request):
     session_attributes = {}
     card_title = "Help"
