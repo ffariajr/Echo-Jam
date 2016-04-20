@@ -130,7 +130,7 @@ def chord_progression(request):
     card_title = "Chord"
     root = prog1.index(request['intent']['slots']['ChordA']['value'])
     theprog = []
-    for z in 0..4:
+    for z in range(0, 4):
         theprog[z] = "'" + sssrc + "chordprogression/" + progs[str(z)][root] + " chord.mp3'"
     speech_output = "<speak>" + chord + " chord <audio src=" + theprog[0] + " /> <audio src=" + theprog[1] + " /> <audio src=" + theprog[2] + " /> <audio src=" + theprog[3] + " /> <audio src=" + theprog[4] + " /> </speak>"
     should_end_session = False
