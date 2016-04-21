@@ -131,11 +131,11 @@ def chord_progression(request):
     rootchord = request['intent']['slots']['ChordA']['value']
     root = prog1.index(rootchord)
     theprog = [0, 0, 0, 0, 0]
-    for z in range(0, 4):
-        theprog[z] = "'" + sssrc + "chordprogression/" + progs[str(z)][root] + " chord.mp3'"
-    speech_output = "<speak>chord progression in the key of " + rootchord
-    for z in range(0, 4):
-        speech_output += " <audio src=" + theprog[z] + " />"
+    for z in range(0, 5):
+        theprog[z] = progs[str(z)][root]
+    speech_output = "<speak> chord progression in the key of " + rootchord
+    for z in range(0, 5):
+        speech_output += " <audio src='" + sssrc + "chordprogression/" + theprog[z] + " chord.mp3' />"
     speech_output += " </speak>"
     should_end_session = False
     return build_response(session_attributes, build_speechlet_response_ssml(card_title, speech_output, None, should_end_session))
