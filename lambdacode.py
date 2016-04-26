@@ -16,7 +16,7 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 prog1 = ["c", "d flat", "d", "e flat", "e", "f", "g flat", "g", "a flat", "a", "b flat", "b"]
-prog2 = ["f", "g flat", "g", "a flat", "a", "b flat", "c flat", "c", "d flat", "d", "e flat", "e"]
+prog2 = ["f", "g flat", "g", "a flat", "a", "b flat", "b", "c", "d flat", "d", "e flat", "e"]
 prog3 = ["g", "a flat", "a", "b flat", "b", "c", "d flat", "d", "e flat", "e", "f", "f sharp"]
 prog4 = ["a minor", "b flat minor", "b minor", "c minor", "c sharp minor", "d minor", "e flat minor", "e minor", "f minor", "f sharp minor", "g minor", "g sharp minor"]
 progs = {"0": prog1, "1": prog2, "2": prog3, "3": prog4, "4": prog1}
