@@ -134,7 +134,7 @@ def chord_progression(request):
     speech_output = "<speak> chord progression in the key of " + rootchord + ": "
     for z in range(0, 5):
         speech_output += progs[str(z)][root].replace(" ", "-") + ", "
-        theprog[z] = progs[str(z)][root].replace(" ", "+")
+        theprog[z] = progs[str(z)][root].replace(" ", "+").replace(".", "").lower
     for z in range(0, 5):
         speech_output += " <audio src=" + sssrc + "chords/" + theprog[z] + "+chord.mp3' />"
     speech_output += " </speak>"
