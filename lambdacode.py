@@ -127,9 +127,6 @@ def one_chord(request):
 
 def chord_progression(request):
     session_attributes = {}
-    if "value" in request['intent']['slots']['ChordB']:
-        playchords(request)
-        return
     card_title = "Chord Progression"
     rootchord = request['intent']['slots']['Key']['value']
     root = prog1.index(rootchord)
@@ -140,22 +137,6 @@ def chord_progression(request):
         theprog[z] = progs[str(z)][root].replace(" ", "+")
     for z in range(0, 5):
         speech_output += " <audio src=" + sssrc + "chords/" + theprog[z] + "+chord.mp3' />"
-    speech_output += " </speak>"
-    should_end_session = False
-    return build_response(session_attributes, build_speechlet_response_ssml(card_title, speech_output, None, should_end_session))
-
-def playchords(request):
-    session_attributes = {}
-    card_title = "Chord Choices"
-    theprog = [0, 0, 0, 0, 0]
-    speech_output = "<speak> Your chord choices: "
-    for z in range(0, 5):
-        if "value" in request['intent']['slots']['Chord' + chr(z + ord("A"))]:
-            speech_output += request['intent']['slots']['Chord' + chr(z + ord("A"))]['value'] + ", "
-            theprog[z] = request['intent']['slots']['Chord' + chr(z + ord("A"))]['value'].replace(" ", "+")
-    for z in range(0, 5):
-        if "value" in request['intent']['slots']['Chord' + chr(z + ord("A"))]:
-            speech_output += " <audio src=" + sssrc + "chords/" + theprog[z] + "+chord.mp3' />"
     speech_output += " </speak>"
     should_end_session = False
     return build_response(session_attributes, build_speechlet_response_ssml(card_title, speech_output, None, should_end_session))
