@@ -131,7 +131,7 @@ def chord_progression(request):
         playchords(request)
         return
     card_title = "Chord Progression"
-    rootchord = request['intent']['slots']['ChordA']['value']
+    rootchord = request['intent']['slots']['Key']['value']
     root = prog1.index(rootchord)
     theprog = [0, 0, 0, 0, 0]
     speech_output = "<speak> chord progression in the key of " + rootchord + ": "
