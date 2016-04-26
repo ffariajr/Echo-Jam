@@ -128,7 +128,7 @@ def one_chord(request):
 def chord_progression(request):
     session_attributes = {}
     card_title = "Chord Progression"
-    rootchord = request['intent']['slots']['Key']['value']
+    rootchord = request['intent']['slots']['Key']['value'].replace(".", "").lower
     root = prog1.index(rootchord)
     theprog = [0, 0, 0, 0, 0]
     speech_output = "<speak> chord progression in the key of " + rootchord + ": "
