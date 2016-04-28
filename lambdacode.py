@@ -94,10 +94,34 @@ def on_session_ended(session_ended_request, session):
 
 def rhyme(request):
     session_attributes = {}
-    card_title = "Rhyme"
-    rhyme = request['intent']['slots']['TheWord']['value']
+    mrsdrw = ("", "", "", "", "")     #means rhymes sounds describes relates
+    mrsdrws = 0
+    if "Means" in request["intent"]["slots"]:
+        mrsdrw[0] = "ml=" + request["intent"]["slots"]["Means"]
+        mrsdrws += 1
+    if "Rhymes" in request["intent"]["slots"]:
+        mrsdrw[1] = "rel_rhy=" + request["intent"]["slots"]["Rhymes"]
+        mrsdrws += 1
+    if "Sounds" in request["intent"]["slots"]:
+        mrsdrw[2] = "sl=" + request["intent"]["slots"]["Sounds"]
+        mrsdrws += 1
+    if "Describes" in request["intent"]["slots"]:
+        mrsdrw[3] = "rel_jjb=" + request["intent"]["slots"]["Describes"]
+        mrsdrws += 1
+    if "Relateds" in request["intent"]["slots"]:
+        mrsdrw[4] = "topics=" + request["intent"]["slots"]["Relates"]
+        mrsdrws += 1
+    if mrsdrws > 2:
+        card_title = "Error! Too many restrictions."
+        speech_output = "Please ask for words with one or two restrictions."
+        should_end_session = False
+        return build_response(session_attributes, build_speechlet_response(card_title, speech_output, None, should_end_session))
+    card_title = "Word Help"
+    reqrestrictions = ""
+    for z in range(0, 5):
+        reqrestrictions += mrsdrw[z]
     req = httplib.HTTPSConnection("api.datamuse.com")
-    req.request("GET", "/words?rel_rhy=" + rhyme)
+    req.request("GET", "/words?" + reqrestrictions)
     req1 = req.getresponse()
     req2 = req1.read()
     req3 = json.loads(req2)
@@ -157,7 +181,7 @@ def halp(request):
     elif(feature == "chord progression"):
         speech_output = "You can ask for a chord progression by saying, 'Give me a chord progression in key, ay'"
     elif(feature == "rhyme" or feature == "rhyming"):
-        speech_output = "You can ask for help with words by saying, 'Give me words that rhyme with, Amazon', or, 'Give me synonyms of, Amazon', or, 'Give me synonyms of, noisy, that rhyme with, Amazon', or, 'Give me words used to describe, Amazon'"
+        speech_output = "You can ask for help with words by saying, 'Give me words that rhyme with, Amazon', or, 'Give me synonyms of Amazon', or, 'Give me synonyms of noisy that rhyme with Amazon', or 'Give me words used to describe Amazon'"
     else:
         speech_output = "You can ask for help for specific features by saying, 'Help chords, help rhyming, help metronome, or help chord progression'"
     reprompt_text = "What do you need help with?"
@@ -190,28 +214,16 @@ def handle_session_end_request():
 
 
 def build_speechlet_response(title, output, reprompt_text, should_end_session):
-    return {
-        'outputSpeech': {
-            'type': 'PlainText',
-            'text': output
-        },
-        'card': {
-            'type': 'Simple',
-            'title': 'Echo Jam - ' + title,
-            'content': 'Echo Jam - ' + output
-        },
-        'reprompt': {
-            'outputSpeech': {
-                'type': 'PlainText',
-                'text': reprompt_text
-            }
-        },
-        'shouldEndSession': should_end_session
-    }
+    return speechlet_response(title, output, reprompt_text, should_end_session, "PlainText")
+
 def build_speechlet_response_ssml(title, output, reprompt_text, should_end_session):
+    speechoutput = output.replace(sssrc, "").replace("<speak>", "").replace("</speak>", "").replace("<audio src=", "").replace(" />", "").replace(".mp3", "").replace("+", " ")
+    return speechlet_response(title, speechoutput, reprompt_text, should_end_session, "SSML")
+
+def speechlet_response(title, output, reprompt, endsession, outputtype):
     return {
         'outputSpeech': {
-            'type': 'SSML',
+            'type': outputtype,
             'ssml': output
         },
         'card': {
@@ -222,12 +234,11 @@ def build_speechlet_response_ssml(title, output, reprompt_text, should_end_sessi
         'reprompt': {
             'outputSpeech': {
                 'type': 'PlainText',
-                'text': reprompt_text
+                'text': reprompt
             }
         },
-        'shouldEndSession': should_end_session
+        'shouldEndSession': endsession
     }    
-
 
 def build_response(session_attributes, speechlet_response):
     return {
