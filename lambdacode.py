@@ -41,7 +41,11 @@ def on_intent(intent_request, session):
     print("on_intent requestId=" + intent_request['requestId'] + ", sessionId=" + session['sessionId'])
     intent = intent_request['intent']
     intent_name = intent_request['intent']['name']
-    if intent_name == "Rhyme":
+    if intent_name == "AMAZON.RepeatIntent":
+        return handle_repeat(intent_request, session["attributes"])
+    elif intent_name == "AMAZON.HelpIntent" or intent_name == "HelpMe":
+        return halp(intent_request)
+    elif intent_name == "Rhyme":
         return rhyme(intent_request, session["attributes"])
     elif intent_name == "Metronome":
         return metronome(intent_request, session["attributes"])
@@ -49,12 +53,8 @@ def on_intent(intent_request, session):
         return one_chord(intent_request, session["attributes"])
     elif intent_name == "ChordProgression":
         return chord_progression(intent_request, session["attributes"])
-    elif intent_name == "AMAZON.HelpIntent" or intent_name == "HelpMe":
-        return halp(intent_request)
     elif intent_name == "AMAZON.CancelIntent" or intent_name == "AMAZON.StopIntent":
         return handle_session_end_request()
-    elif intent_name == "AMAZON.RepeatIntent":
-        return handle_repeat(intent_request, session["attributes"])
     else:
         return error_message()
 
@@ -62,13 +62,23 @@ def on_session_ended(session_ended_request, session):
     print("on_session_ended requestId=" + session_ended_request['requestId'] + ", sessionId=" + session['sessionId'])
 
 def handle_repeat(request, attribs):
-    if "feature" not in attribs:
+    if "attr" not in attribs and "feature" not in attribs["attr"]:
         return error_message()
+    if attribs["attr"]["feature"] == "rhyme":
+        return rhyme(request, attribs)
+    elif attribs["attr"]["feature"] == "metronome":
+        return metronome(request, attribs)
+    elif attribs["attr"]["feature"] == "one_chord":
+        return one_chord(request, attribs)
+    elif attribs["attr"]["feature"] == "chord_progression":
+        return chord_progression(request, attribs)
+    else:
+        return halp(request)
 
 def rhyme(request, attribs):
     reqrestrictions = ""
-    attributes = attribs
-    if ("feature" not in attribs) or ("feature" in attribs and attribs["feature"] != "rhyme"):
+    attributes = attribs["attr"]
+    if ("attr" not in attribs) or ("attr" in attribs and "feature" not in attribs["attr"]) or ("attr" in attribs and "feature" in attribs["attr"] and attribs["attr"]["feature"] != "rhyme"):
         attributes = {"feature": "rhyme", "word1": "", "word2": ""}
         mrsdrw = ["", "", "", "", ""]     #means rhymes sounds describes relates
         mrsdrws = 0
@@ -103,9 +113,12 @@ def rhyme(request, attribs):
             should_end_session = False
             return response(card_title, speech_output, None, should_end_session, "PlainText", {})
         for z in range(0, 5):
-            reqrestrictions += mrsdrw[z]
+            reqrestrictions += mrsdrw[z] + "&"
+        reqrestrictions = reqrestrictions[:-2]
     else:
-        reqrestrictions = attribs["word1"] + attribs["word2"]
+        reqrestrictions = attribs["attr"]["word1"]
+        if attribs["attr"]["word2"]:
+            reqrestrictions +=  "&" + attribs["attr"]["word2"]
     card_title = "Word Help"
     req = httplib.HTTPSConnection("api.datamuse.com")
     req.request("GET", "/words?" + reqrestrictions)
@@ -113,7 +126,7 @@ def rhyme(request, attribs):
     req2 = req1.read()
     req3 = json.loads(req2)
     speech_output = "There are no words that match the conditions you specified."
-    if len(req3) > 1:
+    if len(req3) > 0:
         speech_output = "How about: " + req3[0]["word"]
         q = 1
         while q < len(req3):
@@ -123,26 +136,41 @@ def rhyme(request, attribs):
     return response(card_title, speech_output, None, should_end_session, "PlainText", attributes)
 
 def metronome(request, attribs):
-    session_attributes = {}
-    card_title = "Metronome"
-    bpm = request['intent']['slots']['Rate']['value']
+    attributes = attribs["attr"]
+    bpm = ""
+    if ("attr" not in attribs) or ("attr" in attribs and "feature" not in attribs["attr"]) or ("attr" in attribs and "feature" in attribs["attr"] and attribs["attr"]["feature"] != "metronome"):
+        bpm = request['intent']['slots']['Rate']['value']
+        attributes = {"feature": "metronome", "bpm": bpm}
+    else:
+        bpm = attribs["attr"]["bpm"]
     playbpm = str(int(bpm) - (int(bpm) % 5))
+    card_title = "Metronome"
     speech_output = "<speak>" + bpm + " bpm <audio src=" + sssrc + "metronome/" + playbpm + "bpm.mp3' /> </speak>"
     should_end_session = False
-    return response(card_title, speech_output, None, should_end_session, "SSML", session_attributes)
+    return response(card_title, speech_output, None, should_end_session, "SSML", attributes)
 
 def one_chord(request, attribs):
-    session_attributes = {}
+    attributes = attribs["attr"]
+    chord = ""
+    if ("attr" not in attribs) or ("attr" in attribs and "feature" not in attribs["attr"]) or ("attr" in attribs and "feature" in attribs["attr"] and attribs["attr"]["feature"] != "one_chord"):
+        chord = request['intent']['slots']['TheChord']['value']
+        attributes = {"feature": "one_chord", "chord": chord}
+    else:
+        chord = attribs["attr"]["chord"]
     card_title = "Chord"
-    chord = request['intent']['slots']['TheChord']['value']
     speech_output = "<speak>" + chord + " chord <audio src=" + sssrc + "chords/" + chord.replace(" ", "+").replace(".", "").lower() + "+chord.mp3' /> </speak>"
     should_end_session = False
-    return response(card_title, speech_output, None, should_end_session, "SSML", session_attributes)
+    return response(card_title, speech_output, None, should_end_session, "SSML", attributes)
 
 def chord_progression(request, attribs):
-    session_attributes = {}
+    attributes = attribs["attr"]
+    rootchord = ""
+    if ("attr" not in attribs) or ("attr" in attribs and "feature" not in attribs["attr"]) or ("attr" in attribs and "feature" in attribs["attr"] and attribs["attr"]["feature"] != "chord_progression"):
+        rootchord = request['intent']['slots']['Key']['value'].replace(".", "").lower()
+        attributes = {"feature": "chord_progression", "key": rootchord}
+    else:
+        rootchord = attribs["attr"]["key"]
     card_title = "Chord Progression"
-    rootchord = request['intent']['slots']['Key']['value'].replace(".", "").lower()
     root = prog1.index(rootchord)
     theprog = [0, 0, 0, 0, 0]
     speech_output = "<speak> chord progression in the key of " + rootchord + ": "
@@ -153,7 +181,7 @@ def chord_progression(request, attribs):
         speech_output += " <audio src=" + sssrc + "chords/" + theprog[z] + "+chord.mp3' />"
     speech_output += " </speak>"
     should_end_session = False
-    return response(card_title, speech_output, None, should_end_session, "SSML", session_attributes)
+    return response(card_title, speech_output, None, should_end_session, "SSML", attributes)
 
 def halp(request):
     card_title = "Help"
@@ -208,7 +236,7 @@ def response(title, output, reprompt, endsesh, outputtype, attributes):
         cardoutput = output.replace(sssrc, "").replace("<speak>", "")[:output.index("<audio")-8]
     return {
         'version': '1.0',
-        'sessionAttributes': attributes,
+        'sessionAttributes': {"attr": attributes},
         'response': {
             'outputSpeech': {
                 'type': outputtype,
