@@ -3,9 +3,6 @@ import httplib
 import json
 import logging
 
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
-
 prog1 = ["c", "d flat", "d", "e flat", "e", "f", "g flat", "g", "a flat", "a", "b flat", "b"]
 prog2 = ["f", "g flat", "g", "a flat", "a", "b flat", "b", "c", "d flat", "d", "e flat", "e"]
 prog3 = ["g", "a flat", "a", "b flat", "b", "c", "d flat", "d", "e flat", "e", "f", "f sharp"]
@@ -15,13 +12,8 @@ progs = {"0": prog1, "1": prog2, "2": prog3, "3": prog4, "4": prog1}
 sssrc = "'https://s3.amazonaws.com/echo-jam-audio-files/"
 
 def lambda_handler(event, context):
-    print("event.session.application.applicationId=" + event['session']['application']['applicationId'])
-
     if (event['session']['application']['applicationId'] != "amzn1.echo-sdk-ams.app.b36bad7c-ffbd-492d-8725-88c71aabba91"):
         raise ValueError("Invalid Application ID")
-
-    if event['session']['new']:
-        on_session_started({'requestId': event['request']['requestId']}, event['session'])
 
     if event['request']['type'] == "LaunchRequest" or event['session']['new'] == "true":
         return on_launch(event['request'], event['session'])
@@ -30,11 +22,7 @@ def lambda_handler(event, context):
     elif event['request']['type'] == "SessionEndedRequest":
         return on_session_ended(event['request'], event['session'])
 
-def on_session_started(session_started_request, session):
-    print("on_session_started requestId=" + session_started_request['requestId'] + ", sessionId=" + session['sessionId'])
-
 def on_launch(launch_request, session):
-    print("on_launch requestId=" + launch_request['requestId'] + ", sessionId=" + session['sessionId'])
     return get_welcome_response()
 
 def on_intent(intent_request, session):
@@ -60,6 +48,7 @@ def on_intent(intent_request, session):
 
 def on_session_ended(session_ended_request, session):
     print("on_session_ended requestId=" + session_ended_request['requestId'] + ", sessionId=" + session['sessionId'])
+    return goodbye()
 
 def handle_repeat(request, attribs):
     if "attr" not in attribs and "feature" not in attribs["attr"]:
@@ -218,6 +207,12 @@ def error_message():
     reprompt_text = getHelpMessage()
     should_end_session = False
     return response(card_title, speech_output, reprompt_text, should_end_session, "PlainText", {})
+
+def goodbye():
+    card_title = "Goodbye"
+    speech_output = "Thank you for using Echo Jam."
+    should_end_session = True
+    return response(card_title, speech_output, None, should_end_session, "PlainText", {})
 
 def getHelpMessage():
     return "You can ask me 'Give me a metronome at blank bpm' or 'Give me words that rhyme with blank'. You can also ask me 'Give me a chord progression in key blank' or 'Give me chord blank'."
