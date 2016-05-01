@@ -1,12 +1,3 @@
-"""
-This sample demonstrates a simple skill built with the Amazon Alexa Skills Kit.
-The Intent Schema, Custom Slots, and Sample Utterances for this skill, as well
-as testing instructions are located at http://amzn.to/1LzFrj6
-
-For additional samples, visit the Alexa Skills Kit Getting Started guide at
-http://amzn.to/1LGWsLG
-"""
-
 from __future__ import print_function
 import httplib
 import json
@@ -24,8 +15,7 @@ progs = {"0": prog1, "1": prog2, "2": prog3, "3": prog4, "4": prog1}
 sssrc = "'https://s3.amazonaws.com/echo-jam-audio-files/"
 
 def lambda_handler(event, context):
-    print("event.session.application.applicationId=" +
-          event['session']['application']['applicationId'])
+    print("event.session.application.applicationId=" + event['session']['application']['applicationId'])
 
     if (event['session']['application']['applicationId'] != "amzn1.echo-sdk-ams.app.b36bad7c-ffbd-492d-8725-88c71aabba91"):
         raise ValueError("Invalid Application ID")
@@ -52,51 +42,70 @@ def on_intent(intent_request, session):
     intent = intent_request['intent']
     intent_name = intent_request['intent']['name']
     if intent_name == "Rhyme":
-        return rhyme(intent_request)
+        return rhyme(intent_request, session["attributes"])
     elif intent_name == "Metronome":
-        return metronome(intent_request)
+        return metronome(intent_request, session["attributes"])
     elif intent_name == "OneChord":
-        return one_chord(intent_request)
+        return one_chord(intent_request, session["attributes"])
     elif intent_name == "ChordProgression":
-        return chord_progression(intent_request)
+        return chord_progression(intent_request, session["attributes"])
     elif intent_name == "AMAZON.HelpIntent" or intent_name == "HelpMe":
-        return halp(intent_request)
+        return halp(intent_request, session["attributes"])
     elif intent_name == "AMAZON.CancelIntent" or intent_name == "AMAZON.StopIntent":
         return handle_session_end_request()
+    elif intent_name == "AMAZON.RepeatIntent":
+        return handle_repeat(intent_request, session["attributes"])
     else:
         return error_message()
 
 def on_session_ended(session_ended_request, session):
     print("on_session_ended requestId=" + session_ended_request['requestId'] + ", sessionId=" + session['sessionId'])
 
-def rhyme(request):
-    session_attributes = {}
-    mrsdrw = ["", "", "", "", ""]     #means rhymes sounds describes relates
-    mrsdrws = 0
-    if "value" in request["intent"]["slots"]["Means"]:
-        mrsdrw[0] = "ml=" + request["intent"]["slots"]["Means"]["value"]
-        mrsdrws += 1
-    if "value" in request["intent"]["slots"]["Rhymes"]:
-        mrsdrw[1] = "rel_rhy=" + request["intent"]["slots"]["Rhymes"]["value"]
-        mrsdrws += 1
-    if "value" in request["intent"]["slots"]:
-        mrsdrw[2] = "sl=" + request["intent"]["slots"]["Sounds"]["value"]
-        mrsdrws += 1
-    if "value" in request["intent"]["slots"]["Describes"]:
-        mrsdrw[3] = "rel_jjb=" + request["intent"]["slots"]["Describes"]["value"]
-        mrsdrws += 1
-    if "value" in request["intent"]["slots"]["Relates"]:
-        mrsdrw[4] = "topics=" + request["intent"]["slots"]["Relates"]["value"]
-        mrsdrws += 1
-    if mrsdrws > 2:
-        card_title = "Error! Too many restrictions."
-        speech_output = "Please ask for words with one or two restrictions."
-        should_end_session = False
-        return build_response(session_attributes, build_speechlet_response(card_title, speech_output, None, should_end_session))
-    card_title = "Word Help"
+def handle_repeat(request):
+    if "feature" not in 
+
+def rhyme(request, attribs):
     reqrestrictions = ""
-    for z in range(0, 5):
-        reqrestrictions += mrsdrw[z]
+    attributes = attribs
+    if ("feature" not in attribs) or ("feature" in attribs and attribs["feature"] != "rhyme"):
+        attributes = {"feature": "rhyme", "word1": "", "word2": ""}
+        mrsdrw = ["", "", "", "", ""]     #means rhymes sounds describes relates
+        mrsdrws = 0
+        words = "1"
+        if "value" in request["intent"]["slots"]["Means"]:
+            mrsdrw[0] = "ml=" + request["intent"]["slots"]["Means"]["value"]
+            mrsdrws += 1
+            attributes["word1"] = mrsdrw[0]
+            words = "2"
+        if "value" in request["intent"]["slots"]["Rhymes"]:
+            mrsdrw[1] = "rel_rhy=" + request["intent"]["slots"]["Rhymes"]["value"]
+            mrsdrws += 1
+            attributes["word" + words] = mrsdrw[1]
+            words = "2"
+        if "value" in request["intent"]["slots"]["Sounds"]:
+            mrsdrw[2] = "sl=" + request["intent"]["slots"]["Sounds"]["value"]
+            mrsdrws += 1
+            attributes["word" + words] = mrsdrw[2]
+            words = "2"
+        if "value" in request["intent"]["slots"]["Describes"]:
+            mrsdrw[3] = "rel_jjb=" + request["intent"]["slots"]["Describes"]["value"]
+            mrsdrws += 1
+            attributes["word" + words] = mrsdrw[3]
+            words = "2"
+        if "value" in request["intent"]["slots"]["Relates"]:
+            mrsdrw[4] = "topics=" + request["intent"]["slots"]["Relates"]["value"]
+            mrsdrws += 1
+            attributes["word" + words] = mrsdrw[4]
+        if mrsdrws > 2:
+            card_title = "Error! Too many restrictions."
+            speech_output = "Please ask for words with one or two restrictions."
+            should_end_session = False
+            return response(card_title, speech_output, None, should_end_session, "PlainText", {})
+        for z in range(0, 5):
+            reqrestrictions += mrsdrw[z]
+    else:
+        reqrestrictions = attribs["word1"] + attribs["word2"]
+    card_title = "Word Help"
     req = httplib.HTTPSConnection("api.datamuse.com")
     req.request("GET", "/words?" + reqrestrictions)
     req1 = req.getresponse()
@@ -108,7 +117,7 @@ def rhyme(request):
         speech_output = speech_output + ", " + req3[q]["word"]
         q += 1
     should_end_session = False
-    return build_response(session_attributes, build_speechlet_response(card_title, speech_output, None, should_end_session))
+    return response(card_title, speech_output, None, should_end_session, "PlainText", attributes)
 
 def metronome(request):
     session_attributes = {}
@@ -117,7 +126,7 @@ def metronome(request):
     playbpm = str(int(bpm) - (int(bpm) % 5))
     speech_output = "<speak>" + bpm + " bpm <audio src=" + sssrc + "metronome/" + playbpm + "bpm.mp3' /> </speak>"
     should_end_session = False
-    return build_response(session_attributes, build_speechlet_response_ssml(card_title, speech_output, None, should_end_session))
+    return response(card_title, speech_output, None, should_end_session, "SSML", session_attributes)
 
 def one_chord(request):
     session_attributes = {}
@@ -125,7 +134,7 @@ def one_chord(request):
     chord = request['intent']['slots']['TheChord']['value']
     speech_output = "<speak>" + chord + " chord <audio src=" + sssrc + "chords/" + chord.replace(" ", "+").replace(".", "").lower() + "+chord.mp3' /> </speak>"
     should_end_session = False
-    return build_response(session_attributes, build_speechlet_response_ssml(card_title, speech_output, None, should_end_session))
+    return response(card_title, speech_output, None, should_end_session, "SSML", session_attributes)
 
 def chord_progression(request):
     session_attributes = {}
@@ -141,7 +150,7 @@ def chord_progression(request):
         speech_output += " <audio src=" + sssrc + "chords/" + theprog[z] + "+chord.mp3' />"
     speech_output += " </speak>"
     should_end_session = False
-    return build_response(session_attributes, build_speechlet_response_ssml(card_title, speech_output, None, should_end_session))
+    return response(card_title, speech_output, None, should_end_session, "SSML", session_attributes)
 
 def halp(request):
     session_attributes = {}
@@ -164,7 +173,7 @@ def halp(request):
         speech_output = "You can ask for help for specific features by saying, 'Help chords, help rhyming, help metronome, or help chord progression'"
     reprompt_text = "What do you need help with?"
     should_end_session = False
-    return build_response(session_attributes, build_speechlet_response(card_title, speech_output, reprompt_text, should_end_session))
+    return response(card_title, speech_output, reprompt_text, should_end_session, "PlainText", session_attributes)
 
 def get_welcome_response():
     session_attributes = {}
@@ -172,7 +181,7 @@ def get_welcome_response():
     speech_output = "Welcome to Echo Jam. To get help, say help. "
     reprompt_text = getHelpMessage()
     should_end_session = False
-    return build_response(session_attributes, build_speechlet_response(card_title, speech_output, reprompt_text, should_end_session))
+    return response(card_title, speech_output, reprompt_text, should_end_session, "PlainText", session_attributes)
 
 def error_message():
     session_attributes = {}
@@ -180,7 +189,7 @@ def error_message():
     speech_output = "I could not understand the feature you want to use."
     reprompt_text = getHelpMessage()
     should_end_session = False
-    return build_response(session_attributes, build_speechlet_response(card_title, speech_output, reprompt_text, should_end_session))
+    return response(card_title, speech_output, reprompt_text, should_end_session, "PlainText", session_attributes)
 
 def getHelpMessage():
     return "You can ask me 'Give me a metronome at blank bpm' or 'Give me words that rhyme with blank'. You can also ask me 'Give me a chord progression in key blank' or 'Give me chord blank'."
@@ -189,41 +198,33 @@ def handle_session_end_request():
     card_title = "Session Ended"
     speech_output = "Thank you for making music with Echo Jam. Have a nice day! "
     should_end_session = True
-    return build_response({}, build_speechlet_response(card_title, speech_output, None, should_end_session))
+    return response(card_title, speech_output, None, should_end_session, "PlainText", {})
 
-def build_speechlet_response(title, output, reprompt_text, should_end_session):
-    return return_speechlet_response(title, output, output, reprompt_text, should_end_session, "PlainText")
-
-def build_speechlet_response_ssml(title, output, reprompt_text, should_end_session):
-    speechoutput = output.replace(sssrc, "").replace("<speak>", "")[:output.index("<audio")-8]
-    return return_speechlet_response(title, output, speechoutput, reprompt_text, should_end_session, "SSML")
-
-def return_speechlet_response(title, output, cardoutput, reprompt, endsession, outputtype):
+def response(title, output, reprompt, endsesh, outputtype, attributes):
     ttype = "text"
+    cardoutput = output
     if outputtype == "SSML":
         ttype = "ssml"
-    return {
-        'outputSpeech': {
-            'type': outputtype,
-            ttype: output
-        },
-        'card': {
-            'type': 'Simple',
-            'title': 'Echo Jam - ' + title,
-            'content': 'Echo Jam - ' + cardoutput
-        },
-        'reprompt': {
-            'outputSpeech': {
-                'type': 'PlainText',
-                'text': reprompt
-            }
-        },
-        'shouldEndSession': endsession
-    }    
-
-def build_response(session_attributes, speechlet_response):
+        cardoutput = output.replace(sssrc, "").replace("<speak>", "")[:output.index("<audio")-8]
     return {
         'version': '1.0',
-        'sessionAttributes': session_attributes,
-        'response': speechlet_response
+        'sessionAttributes': attributes,
+        'response': {
+            'outputSpeech': {
+                'type': outputtype,
+                ttype: output
+            },
+            'card': {
+                'type': 'Simple',
+                'title': 'Echo Jam - ' + title,
+                'content': 'Echo Jam - ' + cardoutput
+            },
+            'reprompt': {
+                'outputSpeech': {
+                    'type': 'PlainText',
+                    'text': reprompt
+                }
+            },
+            'shouldEndSession': endsesh
+        }
     }
