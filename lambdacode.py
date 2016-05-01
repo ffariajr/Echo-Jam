@@ -50,7 +50,7 @@ def on_intent(intent_request, session):
     elif intent_name == "ChordProgression":
         return chord_progression(intent_request, session["attributes"])
     elif intent_name == "AMAZON.HelpIntent" or intent_name == "HelpMe":
-        return halp(intent_request, session["attributes"])
+        return halp(intent_request)
     elif intent_name == "AMAZON.CancelIntent" or intent_name == "AMAZON.StopIntent":
         return handle_session_end_request()
     elif intent_name == "AMAZON.RepeatIntent":
@@ -61,8 +61,9 @@ def on_intent(intent_request, session):
 def on_session_ended(session_ended_request, session):
     print("on_session_ended requestId=" + session_ended_request['requestId'] + ", sessionId=" + session['sessionId'])
 
-def handle_repeat(request):
-    if "feature" not in 
+def handle_repeat(request, attribs):
+    if "feature" not in attribs:
+        return error_message()
 
 def rhyme(request, attribs):
     reqrestrictions = ""
@@ -119,7 +120,7 @@ def rhyme(request, attribs):
     should_end_session = False
     return response(card_title, speech_output, None, should_end_session, "PlainText", attributes)
 
-def metronome(request):
+def metronome(request, attribs):
     session_attributes = {}
     card_title = "Metronome"
     bpm = request['intent']['slots']['Rate']['value']
@@ -128,7 +129,7 @@ def metronome(request):
     should_end_session = False
     return response(card_title, speech_output, None, should_end_session, "SSML", session_attributes)
 
-def one_chord(request):
+def one_chord(request, attribs):
     session_attributes = {}
     card_title = "Chord"
     chord = request['intent']['slots']['TheChord']['value']
@@ -136,7 +137,7 @@ def one_chord(request):
     should_end_session = False
     return response(card_title, speech_output, None, should_end_session, "SSML", session_attributes)
 
-def chord_progression(request):
+def chord_progression(request, attribs):
     session_attributes = {}
     card_title = "Chord Progression"
     rootchord = request['intent']['slots']['Key']['value'].replace(".", "").lower()
@@ -153,7 +154,6 @@ def chord_progression(request):
     return response(card_title, speech_output, None, should_end_session, "SSML", session_attributes)
 
 def halp(request):
-    session_attributes = {}
     card_title = "Help"
     feature = request['intent']['slots']['Help']
     if(len(feature) > 1):
@@ -173,23 +173,21 @@ def halp(request):
         speech_output = "You can ask for help for specific features by saying, 'Help chords, help rhyming, help metronome, or help chord progression'"
     reprompt_text = "What do you need help with?"
     should_end_session = False
-    return response(card_title, speech_output, reprompt_text, should_end_session, "PlainText", session_attributes)
+    return response(card_title, speech_output, reprompt_text, should_end_session, "PlainText", {})
 
 def get_welcome_response():
-    session_attributes = {}
     card_title = "Welcome"
     speech_output = "Welcome to Echo Jam. To get help, say help. "
     reprompt_text = getHelpMessage()
     should_end_session = False
-    return response(card_title, speech_output, reprompt_text, should_end_session, "PlainText", session_attributes)
+    return response(card_title, speech_output, reprompt_text, should_end_session, "PlainText", {})
 
 def error_message():
-    session_attributes = {}
     card_title = "Error"
     speech_output = "I could not understand the feature you want to use."
     reprompt_text = getHelpMessage()
     should_end_session = False
-    return response(card_title, speech_output, reprompt_text, should_end_session, "PlainText", session_attributes)
+    return response(card_title, speech_output, reprompt_text, should_end_session, "PlainText", {})
 
 def getHelpMessage():
     return "You can ask me 'Give me a metronome at blank bpm' or 'Give me words that rhyme with blank'. You can also ask me 'Give me a chord progression in key blank' or 'Give me chord blank'."
