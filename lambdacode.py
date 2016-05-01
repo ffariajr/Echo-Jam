@@ -21,6 +21,8 @@ def lambda_handler(event, context):
         return on_intent(event['request'], event['session'])
     elif event['request']['type'] == "SessionEndedRequest":
         return goodbye()
+    else:
+        return error_message()
 
 def on_launch(launch_request, session):
     return get_welcome_response()
@@ -95,7 +97,7 @@ def rhyme(request, attribs):
             card_title = "Error! Too many restrictions."
             speech_output = "Please ask for words with one or two restrictions."
             should_end_session = False
-            return response(card_title, speech_output, None, should_end_session, "PlainText", {})
+            return response(card_title, speech_output, "", should_end_session, "PlainText", {})
         for z in range(0, 5):
             reqrestrictions += mrsdrw[z] + "&"
         reqrestrictions = reqrestrictions[:-2]
@@ -117,7 +119,7 @@ def rhyme(request, attribs):
             speech_output = speech_output + ", " + req3[q]["word"]
             q += 1
     should_end_session = False
-    return response(card_title, speech_output, None, should_end_session, "PlainText", attributes)
+    return response(card_title, speech_output, "", should_end_session, "PlainText", attributes)
 
 def metronome(request, attribs):
     attributes = attribs["attr"]
@@ -131,7 +133,7 @@ def metronome(request, attribs):
     card_title = "Metronome"
     speech_output = "<speak>" + bpm + " bpm <audio src=" + sssrc + "metronome/" + playbpm + "bpm.mp3' /> </speak>"
     should_end_session = False
-    return response(card_title, speech_output, None, should_end_session, "SSML", attributes)
+    return response(card_title, speech_output, "", should_end_session, "SSML", attributes)
 
 def one_chord(request, attribs):
     attributes = attribs["attr"]
@@ -144,7 +146,7 @@ def one_chord(request, attribs):
     card_title = "Chord"
     speech_output = "<speak>" + chord + " chord <audio src=" + sssrc + "chords/" + chord.replace(" ", "+").replace(".", "").lower() + "+chord.mp3' /> </speak>"
     should_end_session = False
-    return response(card_title, speech_output, None, should_end_session, "SSML", attributes)
+    return response(card_title, speech_output, "", should_end_session, "SSML", attributes)
 
 def chord_progression(request, attribs):
     attributes = attribs["attr"]
@@ -165,7 +167,7 @@ def chord_progression(request, attribs):
         speech_output += " <audio src=" + sssrc + "chords/" + theprog[z] + "+chord.mp3' />"
     speech_output += " </speak>"
     should_end_session = False
-    return response(card_title, speech_output, None, should_end_session, "SSML", attributes)
+    return response(card_title, speech_output, "", should_end_session, "SSML", attributes)
 
 def halp(request):
     card_title = "Help"
@@ -207,7 +209,7 @@ def goodbye():
     card_title = "Goodbye"
     speech_output = "Thank you for using Echo Jam."
     should_end_session = True
-    return response(card_title, speech_output, None, should_end_session, "PlainText", {})
+    return response(card_title, speech_output, "", should_end_session, "PlainText", {})
 
 def getHelpMessage():
     return "You can ask me 'Give me a metronome at blank bpm' or 'Give me words that rhyme with blank'. You can also ask me 'Give me a chord progression in key blank' or 'Give me chord blank'."
