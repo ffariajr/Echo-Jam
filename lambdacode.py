@@ -24,9 +24,6 @@ progs = {"0": prog1, "1": prog2, "2": prog3, "3": prog4, "4": prog1}
 sssrc = "'https://s3.amazonaws.com/echo-jam-audio-files/"
 
 def lambda_handler(event, context):
-    """ Route the incoming request based on type (LaunchRequest, IntentRequest,
-    etc.) The JSON body of the request is provided in the event parameter.
-    """
     print("event.session.application.applicationId=" +
           event['session']['application']['applicationId'])
 
@@ -117,8 +114,8 @@ def metronome(request):
     session_attributes = {}
     card_title = "Metronome"
     bpm = request['intent']['slots']['Rate']['value']
-    playbpm = bpm - (bpm % 5)
-    speech_output = "<speak>" + playbpm + " bpm <audio src=" + sssrc + "metronome/" + bpm + "bpm.mp3' /> </speak>"
+    playbpm = str(int(bpm) - (int(bpm) % 5))
+    speech_output = "<speak>" + bpm + " bpm <audio src=" + sssrc + "metronome/" + playbpm + "bpm.mp3' /> </speak>"
     should_end_session = False
     return build_response(session_attributes, build_speechlet_response_ssml(card_title, speech_output, None, should_end_session))
 
@@ -198,7 +195,7 @@ def build_speechlet_response(title, output, reprompt_text, should_end_session):
     return return_speechlet_response(title, output, output, reprompt_text, should_end_session, "PlainText")
 
 def build_speechlet_response_ssml(title, output, reprompt_text, should_end_session):
-    speechoutput = output.replace(sssrc, "").replace("<speak>", "").replace("</speak>", "").replace("<audio src=", "").replace(" />", "").replace(".mp3", "").replace("+", " ").replace("chords/", "").replace("metronome/", "")
+    speechoutput = output.replace(sssrc, "").replace("<speak>", "")[:output.index("<audio")-8]
     return return_speechlet_response(title, output, speechoutput, reprompt_text, should_end_session, "SSML")
 
 def return_speechlet_response(title, output, cardoutput, reprompt, endsession, outputtype):
