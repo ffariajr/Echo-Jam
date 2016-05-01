@@ -20,13 +20,12 @@ def lambda_handler(event, context):
     elif event['request']['type'] == "IntentRequest":
         return on_intent(event['request'], event['session'])
     elif event['request']['type'] == "SessionEndedRequest":
-        return on_session_ended(event['request'], event['session'])
+        return goodbye()
 
 def on_launch(launch_request, session):
     return get_welcome_response()
 
 def on_intent(intent_request, session):
-    print("on_intent requestId=" + intent_request['requestId'] + ", sessionId=" + session['sessionId'])
     intent = intent_request['intent']
     intent_name = intent_request['intent']['name']
     if intent_name == "AMAZON.RepeatIntent":
@@ -42,13 +41,9 @@ def on_intent(intent_request, session):
     elif intent_name == "ChordProgression":
         return chord_progression(intent_request, session["attributes"])
     elif intent_name == "AMAZON.CancelIntent" or intent_name == "AMAZON.StopIntent":
-        return handle_session_end_request()
+        return goodbye()
     else:
         return error_message()
-
-def on_session_ended(session_ended_request, session):
-    print("on_session_ended requestId=" + session_ended_request['requestId'] + ", sessionId=" + session['sessionId'])
-    return goodbye()
 
 def handle_repeat(request, attribs):
     if "attr" not in attribs and "feature" not in attribs["attr"]:
@@ -216,12 +211,6 @@ def goodbye():
 
 def getHelpMessage():
     return "You can ask me 'Give me a metronome at blank bpm' or 'Give me words that rhyme with blank'. You can also ask me 'Give me a chord progression in key blank' or 'Give me chord blank'."
-
-def handle_session_end_request():
-    card_title = "Session Ended"
-    speech_output = "Thank you for making music with Echo Jam. Have a nice day! "
-    should_end_session = True
-    return response(card_title, speech_output, None, should_end_session, "PlainText", {})
 
 def response(title, output, reprompt, endsesh, outputtype, attributes):
     ttype = "text"
