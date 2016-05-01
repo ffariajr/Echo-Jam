@@ -112,11 +112,13 @@ def rhyme(request, attribs):
     req1 = req.getresponse()
     req2 = req1.read()
     req3 = json.loads(req2)
-    speech_output = "How about: " + req3[0]["word"]
-    q = 1
-    while q < len(req3):
-        speech_output = speech_output + ", " + req3[q]["word"]
-        q += 1
+    speech_output = "There are no words that match the conditions you specified."
+    if len(req3) > 1:
+        speech_output = "How about: " + req3[0]["word"]
+        q = 1
+        while q < len(req3):
+            speech_output = speech_output + ", " + req3[q]["word"]
+            q += 1
     should_end_session = False
     return response(card_title, speech_output, None, should_end_session, "PlainText", attributes)
 
