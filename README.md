@@ -67,3 +67,7 @@ Chord progressions, which are sequences of chords played one after the other, ar
 Lastly, Echo Jam can play a metronome beat from very slow to very fast.
 
 > play a beat at one hundred and seventy five bpm
+
+
+
+###### For instructions on Echo Jam's configuration and how to set up Echo Jam by yourself, see [setup.md](https://github.com/ffariajr/Echo-Jam/blob/master/setup.md)
