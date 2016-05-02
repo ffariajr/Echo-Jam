@@ -1,11 +1,6 @@
 # Setup
 
-#### This file describes how Echo Jam [is set up](#configuration), and how to set up Echo Jam [by yourself.](#walkthrough)
-
-<a name="configuration" />
-## Configuration
-
-
+#### This file describes how to set up Echo Jam [by yourself.](#walkthrough)
 
 <a name="walkthrough" />
 ## Setup Walkthrough
