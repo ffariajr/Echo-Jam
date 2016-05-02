@@ -1,1 +1,77 @@
-I
+{
+  "intents": [
+    {
+      "intent": "Rhyme",
+      "slots": [
+        {
+          "name": "Means",
+          "type": "WORD"
+        },
+        {
+          "name": "Rhymes",
+          "type": "WORD"
+        },
+        {
+          "name": "Sounds",
+          "type": "WORD"
+        },
+        {
+          "name": "Describes",
+          "type": "WORD"
+        },
+        {
+          "name": "Relates",
+          "type": "WORD"
+        }
+      ]
+    },
+    {
+      "intent": "Metronome",
+      "slots": [
+        {
+          "name": "Rate",
+          "type": "BPM"
+        }
+      ]
+    },
+    {
+      "intent": "OneChord",
+      "slots": [
+        {
+          "name": "TheChord",
+          "type": "CHORD"
+        }
+      ]
+    },
+    {
+      "intent": "ChordProgression",
+      "slots": [
+        {
+          "name": "Key",
+          "type": "CHORD"
+        }
+      ]
+    },
+    {
+      "intent": "HelpMe",
+      "slots": [
+        {
+          "name": "Help",
+          "type": "FEATURE"
+        }
+      ]
+    },
+    {
+      "intent": "AMAZON.StopIntent"
+    },
+    {
+      "intent": "AMAZON.CancelIntent"
+    },
+    {
+      "intent": "AMAZON.HelpIntent"
+    },
+    {
+      "intent": "AMAZON.RepeatIntent"
+    }
+  ]
+}
