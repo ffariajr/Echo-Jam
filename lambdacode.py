@@ -14,51 +14,55 @@ prog3 = ["g", "a flat", "a", "b flat", "b", "c", "d flat", "d", "e flat", "e", "
 prog4 = ["a minor", "b flat minor", "b minor", "c minor", "c sharp minor", "d minor", "e flat minor", "e minor", "f minor", "f sharp minor", "g minor", "g sharp minor"]
 progs = {"0": prog1, "1": prog2, "2": prog3, "3": prog4, "4": prog1}
 
+# base url for where our audio files are stored
 sssrc = "'https://s3.amazonaws.com/echo-jam-audio-files/"
 
+# "main" function
 def lambda_handler(event, context):
+    
+    # checks if the skill that called this function is actually the skill I created, and not another developer's skill
     if (event['session']['application']['applicationId'] != "amzn1.echo-sdk-ams.app.b36bad7c-ffbd-492d-8725-88c71aabba91"):
         raise ValueError("Invalid Application ID")
 
-    if event['request']['type'] == "LaunchRequest" or event['session']['new'] == "true":
+    if event['request']['type'] == "LaunchRequest" or event['session']['new'] == "true": # skill session started
         return on_launch(event['request'], event['session'])
-    elif event['request']['type'] == "IntentRequest":
+    elif event['request']['type'] == "IntentRequest": # skill feature requested after the session has started
         return on_intent(event['request'], event['session'])
-    elif event['request']['type'] == "SessionEndedRequest":
+    elif event['request']['type'] == "SessionEndedRequest": # user has ended the session
         return goodbye()
     else:
         return error_message()
 
+# simple welcome message
 def on_launch(launch_request, session):
     return get_welcome_response()
 
 # Below, we are telling Alexa to take the user utterance and pass it to the corresponding function or command.
-# For example, line 45 and 46 are referenced when a user says a command related to rhyming. Our code will take that user request
+# For example, line 50 and 51 are referenced when a user says a command related to rhyming. Our code will take that user request
 # and call the rhyme() function with the user's request as a parameter.
-
 def on_intent(intent_request, session):
     intent = intent_request['intent']
-    intent_name = intent_request['intent']['name']
+    intent_name = intent_request['intent']['name'] # based on our intent schema and sample utterances, Alexa passes in what intent the user asked for
     if intent_name == "AMAZON.RepeatIntent":
         return handle_repeat(intent_request, session["attributes"])
     elif intent_name == "AMAZON.HelpIntent" or intent_name == "HelpMe":
-        return halp(intent_request)
+        return halp(intent_request) # help is a keyword
     elif intent_name == "Rhyme":
-        return rhyme(intent_request, session["attributes"])
+        return rhyme(intent_request, {})
     elif intent_name == "Metronome":
-        return metronome(intent_request, session["attributes"])
+        return metronome(intent_request, {})
     elif intent_name == "OneChord":
-        return one_chord(intent_request, session["attributes"])
+        return one_chord(intent_request, {})
     elif intent_name == "ChordProgression":
-        return chord_progression(intent_request, session["attributes"])
+        return chord_progression(intent_request, {})
     elif intent_name == "AMAZON.CancelIntent" or intent_name == "AMAZON.StopIntent":
         return goodbye()
     else:
         return error_message()
 
 def handle_repeat(request, attribs):
-    if "attr" not in attribs and "feature" not in attribs["attr"]:  # redirects to error message if user speaks utterance
-        return error_message()                                      # that doesn't exist or isn't recognized
+    if "attr" not in attribs and "feature" not in attribs["attr"]:  # redirects to error message if user asks to repeat and the previous request was a help request or a session start request
+        return error_message()
     if attribs["attr"]["feature"] == "rhyme":
         return rhyme(request, attribs)
     elif attribs["attr"]["feature"] == "metronome":
@@ -75,7 +79,7 @@ def handle_repeat(request, attribs):
 # "Give me words that rhyme with 'cat' that have to do with 'Canada'"
 
 def rhyme(request, attribs):
-    reqrestrictions = ""
+    reqrestrictions = "" # request restrictions
     attributes = attribs["attr"]
     if ("attr" not in attribs) or ("attr" in attribs and "feature" not in attribs["attr"]) or ("attr" in attribs and "feature" in attribs["attr"] and attribs["attr"]["feature"] != "rhyme"):
         attributes = {"feature": "rhyme", "word1": "", "word2": ""}
