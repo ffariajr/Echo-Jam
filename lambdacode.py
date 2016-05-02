@@ -48,13 +48,13 @@ def on_intent(intent_request, session):
     elif intent_name == "AMAZON.HelpIntent" or intent_name == "HelpMe":
         return halp(intent_request) # help is a keyword
     elif intent_name == "Rhyme":
-        return rhyme(intent_request, {})
+        return rhyme(intent_request, {"attr": ""})
     elif intent_name == "Metronome":
-        return metronome(intent_request, {})
+        return metronome(intent_request, {"attr": ""})
     elif intent_name == "OneChord":
-        return one_chord(intent_request, {})
+        return one_chord(intent_request, {"attr": ""})
     elif intent_name == "ChordProgression":
-        return chord_progression(intent_request, {})
+        return chord_progression(intent_request, {"attr": ""})
     elif intent_name == "AMAZON.CancelIntent" or intent_name == "AMAZON.StopIntent":
         return goodbye()
     else:
@@ -95,7 +95,7 @@ def rhyme(request, attribs):
             mrsdrw[1] = "rel_rhy=" + request["intent"]["slots"]["Rhymes"]["value"]
             mrsdrws += 1
             attributes["word" + words] = mrsdrw[1]                              # These if-statements handle the different rhyming statements and resulting responses from  Alexa. 
-            words = "2"                                                         # They all access the various Datamuse API libraries, as in line 101. This is for the different and varied rhyming and synonym searching commands.
+            words = "2"
         if "value" in request["intent"]["slots"]["Sounds"]:
             mrsdrw[2] = "sl=" + request["intent"]["slots"]["Sounds"]["value"]
             mrsdrws += 1
