@@ -31,6 +31,6 @@ Click Next.
 Then look at the left side navigation menu and click **Configuration**.
 Select the **Lambda ARN (Amazon Resource Name)** bullet, and paste in the Lambda ARN which should still be in your clipboard.
 Select *No* for **Account Linking**.
-Click **Save**, and then click **Interaction Model** in the left side navigation menu. This is where you will paste in the *Intent Schema*, *Custom Slot Values*, and *Sample Utterances* from the respective files in the [config](https://github.com/ffariajr/Echo-Jam/blob/master/config) folder.
+Click **Save**, and then click **Interaction Model** in the left side navigation menu. This is where you will paste in the *Intent Schema*, *Custom Slot Values*, and *Sample Utterances* from the respective files in the [config](https://github.com/ffariajr/Echo-Jam/blob/master/config) folder.  Remember to click *save*.  It will take some time for Alexa to update her *interaction model*.
 
 #### Your new Alexa Skill is complete. You may use [Amazon's documentation on Alexa](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit#get-started-now) for help in modifying the code.
