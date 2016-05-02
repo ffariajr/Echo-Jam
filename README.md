@@ -4,20 +4,20 @@
 
 Echo Jam offers four features that help song writers.
 
-- [Rhyming & general help with finding words](#rhyming)
-- [Playing single chords](#chords)
-- [Playing chord progressions](#chordprog)
+- [Rhyming & general help with finding words](#word-help)
+- [Playing single chords](#chord)
+- [Playing chord progressions](#chord-progression)
 - [Playing metronome beats](#metronome)
 
-<a name="rhyming" />
+<a name="word-help" />
 ## Rhyming & General Help with Finding Words
 
 
-<a name="chords" />
+<a name="chord" />
 ## Playing Single Chords
 
 
-<a name="chordprog" />
+<a name="chord-progression" />
 ## Playing Chord Progressions
 
 
