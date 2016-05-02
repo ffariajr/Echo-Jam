@@ -3,6 +3,11 @@ import httplib
 import json
 import logging
 
+# Below, we create 4 arrays. Each array holds individual chords, with corresponding indexes in each array representing
+# a chord progression. For example, prog1[0] holds "c", and prog2[0] holds "f". Each of the [0] index slots together forms the 
+# "chord progression in key C". The fifth slot in the chord progression is the same as the first one (ex. C progression begins 
+# and ends with "C". The progs{} stores each of the chords in its slots for Alexa to later play to the user in order
+
 prog1 = ["c", "d flat", "d", "e flat", "e", "f", "g flat", "g", "a flat", "a", "b flat", "b"]
 prog2 = ["f", "g flat", "g", "a flat", "a", "b flat", "b", "c", "d flat", "d", "e flat", "e"]
 prog3 = ["g", "a flat", "a", "b flat", "b", "c", "d flat", "d", "e flat", "e", "f", "f sharp"]
@@ -27,6 +32,10 @@ def lambda_handler(event, context):
 def on_launch(launch_request, session):
     return get_welcome_response()
 
+# Below, we are telling Alexa to take the user utterance and pass it to the corresponding function or command.
+# For example, line 45 and 46 are referenced when a user says a command related to rhyming. Our code will take that user request
+# and call the rhyme() function with the user's request as a parameter.
+
 def on_intent(intent_request, session):
     intent = intent_request['intent']
     intent_name = intent_request['intent']['name']
@@ -48,8 +57,8 @@ def on_intent(intent_request, session):
         return error_message()
 
 def handle_repeat(request, attribs):
-    if "attr" not in attribs and "feature" not in attribs["attr"]:
-        return error_message()
+    if "attr" not in attribs and "feature" not in attribs["attr"]:  # redirects to error message if user speaks utterance
+        return error_message()                                      # that doesn't exist or isn't recognized
     if attribs["attr"]["feature"] == "rhyme":
         return rhyme(request, attribs)
     elif attribs["attr"]["feature"] == "metronome":
@@ -61,12 +70,16 @@ def handle_repeat(request, attribs):
     else:
         return halp(request)
 
+# This is the rhyming function, which allows users to give Alexa a word to rhyme or find words with similar meanings
+# We make use of the Datamuse public API to allow for commands such as "Give me word that rhymes with 'dog'" or
+# "Give me words that rhyme with 'cat' that have to do with 'Canada'"
+
 def rhyme(request, attribs):
     reqrestrictions = ""
     attributes = attribs["attr"]
     if ("attr" not in attribs) or ("attr" in attribs and "feature" not in attribs["attr"]) or ("attr" in attribs and "feature" in attribs["attr"] and attribs["attr"]["feature"] != "rhyme"):
         attributes = {"feature": "rhyme", "word1": "", "word2": ""}
-        mrsdrw = ["", "", "", "", ""]     #means rhymes sounds describes relates
+        mrsdrw = ["", "", "", "", ""]     #means, rhymes, sounds, describes, relates
         mrsdrws = 0
         words = "1"
         if "value" in request["intent"]["slots"]["Means"]:
@@ -77,8 +90,8 @@ def rhyme(request, attribs):
         if "value" in request["intent"]["slots"]["Rhymes"]:
             mrsdrw[1] = "rel_rhy=" + request["intent"]["slots"]["Rhymes"]["value"]
             mrsdrws += 1
-            attributes["word" + words] = mrsdrw[1]
-            words = "2"
+            attributes["word" + words] = mrsdrw[1]                              # These if-statements handle the different rhyming statements and resulting responses from  Alexa. 
+            words = "2"                                                         # They all access the various Datamuse API libraries, as in line 101. This is for the different and varied rhyming and synonym searching commands.
         if "value" in request["intent"]["slots"]["Sounds"]:
             mrsdrw[2] = "sl=" + request["intent"]["slots"]["Sounds"]["value"]
             mrsdrws += 1
@@ -121,6 +134,9 @@ def rhyme(request, attribs):
     should_end_session = False
     return response(card_title, speech_output, "", should_end_session, "PlainText", attributes)
 
+# This feature allows users to request a metronome to play at a specified BPM range. The files for the different tempos are stored
+# on our Google Drive.
+
 def metronome(request, attribs):
     attributes = attribs["attr"]
     bpm = ""
@@ -129,11 +145,13 @@ def metronome(request, attribs):
         attributes = {"feature": "metronome", "bpm": bpm}
     else:
         bpm = attribs["attr"]["bpm"]
-    playbpm = str(int(bpm) - (int(bpm) % 5))
+    playbpm = str(int(bpm) - (int(bpm) % 5)) # this line handles users who give a value such as '67 bpm' and rounds it to the nearest interval of 5 (for example, '67' rounds to '70').
     card_title = "Metronome"
     speech_output = "<speak>" + bpm + " bpm <audio src=" + sssrc + "metronome/" + playbpm + "bpm.mp3' /> </speak>"
     should_end_session = False
     return response(card_title, speech_output, "", should_end_session, "SSML", attributes)
+
+# This function allows users to request a single chord that Alexa will play back after repeating what she heard.
 
 def one_chord(request, attribs):
     attributes = attribs["attr"]
@@ -143,10 +161,12 @@ def one_chord(request, attribs):
         attributes = {"feature": "one_chord", "chord": chord}
     else:
         chord = attribs["attr"]["chord"]
-    card_title = "Chord"
+    card_title = "Chord"                        # Below is the line where we construct Alexa's returned speech based and request for the specific chord file (the chord files are located in our Google Drive)
     speech_output = "<speak>" + chord + " chord <audio src=" + sssrc + "chords/" + chord.replace(" ", "+").replace(".", "").lower() + "+chord.mp3' /> </speak>"
     should_end_session = False
     return response(card_title, speech_output, "", should_end_session, "SSML", attributes)
+
+# This function allows users to request chord progressions beginning with a root key (ex. "Give m a chord progression in key 'C'")
 
 def chord_progression(request, attribs):
     attributes = attribs["attr"]
@@ -160,7 +180,7 @@ def chord_progression(request, attribs):
     root = prog1.index(rootchord)
     theprog = [0, 0, 0, 0, 0]
     speech_output = "<speak> chord progression in the key of " + rootchord + ": "
-    for z in range(0, 5):
+    for z in range(0, 5):                                                               # this line loops for 5 iterations, creating a chord progression with the 5 determined chords from our Google Drive storage
         speech_output += progs[str(z)][root].replace(" ", "-") + ", "
         theprog[z] = progs[str(z)][root].replace(" ", "+").replace(".", "").lower()
     for z in range(0, 5):
@@ -168,6 +188,9 @@ def chord_progression(request, attribs):
     speech_output += " </speak>"
     should_end_session = False
     return response(card_title, speech_output, "", should_end_session, "SSML", attributes)
+
+# This is our help method, which allows uers to interact with vocal commands to find out which commands Alexa can respond to
+# while in Echo Jam
 
 def halp(request):
     card_title = "Help"
@@ -180,7 +203,7 @@ def halp(request):
     if(feature == "metronome"):
         speech_output = "You can ask for a tempo by saying, 'Give me a beat at 100 bpm'"
     elif(feature == "chord" or feature == "chords"):
-        speech_output = "You can ask for a chord by saying, 'Give me an ay chord'"
+        speech_output = "You can ask for a chord by saying, 'Give me an ay chord'"  # ay is written this way to aid in Alexa's pronunciation of the letter 'a'
     elif(feature == "chord progression"):
         speech_output = "You can ask for a chord progression by saying, 'Give me a chord progression in key, ay'"
     elif(feature == "rhyme" or feature == "rhyming"):
@@ -210,6 +233,8 @@ def goodbye():
     speech_output = "Thank you for using Echo Jam."
     should_end_session = True
     return response(card_title, speech_output, "", should_end_session, "PlainText", {})
+
+# This is the generic help message, which offers four general statements that users can ask Alexa. These categories can be explored in more detail through the help commands defined above.
 
 def getHelpMessage():
     return "You can ask me 'Give me a metronome at blank bpm' or 'Give me words that rhyme with blank'. You can also ask me 'Give me a chord progression in key blank' or 'Give me chord blank'."
