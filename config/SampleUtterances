@@ -1,1 +1,117 @@
-c
+Rhyme find words that rhyme with {Rhymes}
+Rhyme give me words that rhyme with {Rhymes}
+Rhyme give me a word that rhymes with {Rhymes}
+Rhyme give me a word that sounds like {Sounds}
+Rhyme what's a word that rhymes with {Rhymes}
+Rhyme what are words that rhyme with {Rhymes}
+Rhyme what are words that rhyme with {Rhymes}
+Rhyme find synonyms of {Means}
+Rhyme give me synonyms of {Means}
+Rhyme what are synonyms of {Means}
+Rhyme find words that mean {Means}
+Rhyme give me words that mean {Means}
+Rhyme what are words that mean {Means}
+Rhyme find words that sound like {Sounds}
+Rhyme give me words that sound like {Sounds}
+Rhyme what are words that sound like {Sounds}
+Rhyme give me words that rhyme with {Rhymes} which mean {Means}
+Rhyme what are words that rhyme with {Rhymes} which mean {Means}
+Rhyme find words that rhyme with {Rhymes} which mean {Means}
+Rhyme give me words that rhyme with {Rhymes} which are related to {Relates}
+Rhyme what are words that rhyme with {Rhymes} which are related to {Relates}
+Rhyme find words that rhyme with {Rhymes} which are related to {Relates}
+Rhyme give me words that rhyme with {Rhymes} which sounds like {Sounds}
+Rhyme what are words that rhyme with {Rhymes} which sounds like {Sounds}
+Rhyme find words that rhyme with {Rhymes} which sounds like {Sounds}
+Rhyme give me words that rhyme with {Rhymes} which describes {Describes}
+Rhyme what are words that rhyme with {Rhymes} which describes {Describes}
+Rhyme find words that rhyme with {Rhymes} which describes {Describes}
+Rhyme give me words that mean {Means} which rhyme with {Rhymes}
+Rhyme give me words that mean {Means} which sound like {Sounds}
+Rhyme give me words that mean {Means} which describe {Describes}
+Rhyme give me words that mean {Means} which are related {Relates}
+Rhyme find words that mean {Means} which rhyme with {Rhymes}
+Rhyme find words that mean {Means} which sound like {Sounds}
+Rhyme find words that mean {Means} which describe {Describes}
+Rhyme find words that mean {Means} which are related to {Relates}
+Rhyme what are words that mean {Means} which rhyme with {Rhymes}
+Rhyme what are words that mean {Means} which sound like {Sounds}
+Rhyme what are words that mean {Means} which describe {Describes}
+Rhyme what are words that mean {Means} which are related to {Relates}
+Rhyme give me words that describe {Describes} which rhyme with {Rhymes}
+Rhyme give me words that describe {Describes} which sound like {Sounds}
+Rhyme give me words that describe {Describes} which means {Means}
+Rhyme give me words that describe {Describes} which are related to {Relates}
+Rhyme find words that describe {Describes} which rhyme with {Rhymes}
+Rhyme find words that describe {Describes} which sound like {Sounds}
+Rhyme find words that describe {Describes} which means {Means}
+Rhyme find words that describe {Describes} which are related to {Relates}
+Rhyme what are words that describe {Describes} which rhyme with {Rhymes}
+Rhyme what are words that describe {Describes} which sound like {Sounds}
+Rhyme what are words that describe {Describes} which means {Means}
+Rhyme what are words that describe {Describes} which are related to {Relates}
+Rhyme give me words that sound like {Sounds} which rhyme with {Rhymes}
+Rhyme give me words that sound like {Sounds} which describe {Describes}
+Rhyme give me words that sound like {Sounds} which mean {Means}
+Rhyme give me words that sound like {Sounds} which are related to {Relates}
+Rhyme find words that sound like {Sounds} which rhyme with {Rhymes}
+Rhyme find words that sound like {Sounds} which describe {Describes}
+Rhyme find words that sound like {Sounds} which mean {Means}
+Rhyme find words that sound like {Sounds} which are related to {Relates}
+Rhyme what are words that sound like {Sounds} which rhyme with {Rhymes}
+Rhyme what are words that sound like {Sounds} which describe {Describes}
+Rhyme what are words that sound like {Sounds} which mean {Means}
+Rhyme what are words that sound like {Sounds} which are related to {Relates}
+Rhyme find words that are related to {Relates}
+Rhyme what are words related to {Relates}
+Rhyme give me words that are related to {Relates}
+Rhyme what are words that are related to {Relates} which rhyme with {Rhymes}
+Rhyme what are words that are related to {Relates} which means {Means}
+Rhyme what are words that are related to {Relates} which sounds like {Sounds}
+Rhyme what are words that are related to {Relates} which describes {Describes}
+Rhyme find words that are related to {Relates} which rhyme with {Rhymes}
+Rhyme find words that are related to {Relates} which means {Means}
+Rhyme find words that are related to {Relates} which sounds like {Sounds}
+Rhyme find words that are related to {Relates} which describes {Describes}
+Rhyme give me words that are related to {Relates} which rhyme with {Rhymes}
+Rhyme give me words that are related to {Relates} which means {Means}
+Rhyme give me words that are related to {Relates} which sounds like {Sounds}
+Rhyme give me words that are related to {Relates} which describes {Describes}
+
+Metronome give me a beat at {Rate} BPM
+Metronome give me a tempo at {Rate} BPM
+Metronome play me a beat at {Rate} BPM
+Metronome play me a tempo at {Rate} BPM
+Metronome play {Rate} BPM
+
+OneChord play {TheChord}
+OneChord play the {TheChord}
+OneChord play an {TheChord}
+OneChord play a {TheChord}
+OneChord play me a {TheChord}
+OneChord play me an {TheChord}
+OneChord give me an {TheChord}
+OneChord give me a {TheChord}
+OneChord give me the {TheChord}
+OneChord play {TheChord} chord
+OneChord play the {TheChord} chord
+OneChord play an {TheChord} chord
+OneChord play a {TheChord} chord
+OneChord play me a {TheChord} chord
+OneChord play me an {TheChord} chord
+OneChord give me an {TheChord} chord
+OneChord give me a {TheChord} chord
+OneChord give me the {TheChord} chord
+
+ChordProgression play a chord progression in the key of {Key}
+ChordProgression play me a chord progression in the key of {Key}
+ChordProgression play a chord progression in key {Key}
+ChordProgression play me a chord progression in key {Key}
+ChordProgression give a chord progression in the key of {Key}
+ChordProgression give me a chord progression in the key of {Key}
+ChordProgression give a chord progression in key {Key}
+ChordProgression give me a chord progression in key {Key}
+
+HelpMe help
+HelpMe help {Help}
+HelpMe help with {Help}
